@@ -31,6 +31,15 @@ elif print("Invalid option no products added"):
      print()# consider exception handling 
    
     
+#############################################################
+#This part is me trying to connect the product to a new file#
+#############################################################
 
+# def read_file():
+#     file = open("mini-project-product-persistance.txt", "w+")
+#     contents = file.read()
+#     print(contents)
+
+'''Just putting this to test if my vscode has been connected with github.'''
 
 main_menu()
