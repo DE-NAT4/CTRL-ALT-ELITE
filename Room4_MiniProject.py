@@ -29,6 +29,13 @@ elif print("Invalid option no products added"):
 
     def remove_product():# REMOVE PRODUCTS FROM A LIST USING INDEX NUMBER - Zak 
      print()# consider exception handling 
+
+
+
+     #happy hour
+     #make a change
+     #testingt
+
    
     
 #############################################################
