@@ -138,6 +138,120 @@ def update_product():
         else:
             print("Please try again.")
 
+def orders_menu():
+    print("¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬")
+    print("|            Orders Menu                 |")
+    print("| Print Orders                         1 |")
+    print("| Add Order                            2 |")
+    print("| Update Order Status                  3 |")
+    print("| Update Order Details                 4 |")
+    print("| Delete Order                         5 |")
+    print("| Return                               0 |")
+    print("|________________________________________|")
+
+def print_orders():
+    if len(Orders) == 0:
+        print("No orders.")
+    else:
+        i = 0
+        while i < len(Orders):
+            print(i, Orders[i])
+            i += 1
+
+def add_order():
+    name = input("Name: ")
+    address = input("Address: ")
+    phone = input("Phone: ")
+
+    order = {
+        "name": name,
+        "address": address,
+        "phone": phone,
+        "status": "PREPARING"
+    }
+
+    Orders.append(order)
+    print("Order added.")
+
+def print_statuses():
+    i = 0
+    while i < len(status_list):
+        print(i, status_list[i])
+        i += 1
+
+
+def update_status():
+    print_orders()
+    order_index = int(input("Order index: "))
+
+    print_statuses()
+    status_index = int(input("Status index: "))
+
+    if order_index < len(Orders) and status_index < len(status_list):
+        Orders[order_index]["status"] = status_list[status_index]
+        print("Status updated.")
+    else:
+        print("Invalid input.")
+
+def update_order():
+    print_orders()
+    index = int(input("Order index: "))
+
+    if index < len(Orders):
+        order = Orders[index]
+
+        name = input("New name (leave blank to skip): ")
+        if name != "":
+            order["name"] = name
+
+        address = input("New address (leave blank to skip): ")
+        if address != "":
+            order["address"] = address
+
+        phone = input("New phone (leave blank to skip): ")
+        if phone != "":
+            order["phone"] = phone
+
+        print("Order updated.")
+    else:
+        print("Invalid index.")
+
+def delete_order():
+    print_orders()
+    index = int(input("Order index to delete: "))
+
+    if index < len(Orders):
+        Orders.pop(index)
+        print("Order deleted.")
+    else:
+        print("Invalid index.")
+
+def orders_menu_process():
+    while True:
+        orders_menu()
+        choice = input("Select: ")
+
+        if choice == "0":
+            return
+
+        elif choice == "1":
+            print_orders()
+
+        elif choice == "2":
+            add_order()
+
+        elif choice == "3":
+            update_status()
+
+        elif choice == "4":
+            update_order()
+
+        elif choice == "5":
+            delete_order()
+
+        else:
+            print("Invalid choice.")
+
 load_products()
 main_menu_options()
 
