@@ -259,4 +259,3 @@ main_menu_options()
 list in columns on index and values(basically, 
 make the product look nicer)(check your notebook)'''
 
-
