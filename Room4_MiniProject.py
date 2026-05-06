@@ -300,8 +300,7 @@ def couriers_main():
 
 
 
-load_products()
-main_menu_options()
+
 
 
 '''Also, use the visible index and value pair, and create the product
