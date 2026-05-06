@@ -1,210 +1,458 @@
-Product = ["chai", "lemon tea", "liquorice tea"]
-Orders = []
+import json
 
-status_list = ["PREPARING", "DISPATCHED", "DELIVERED"]
 
- # item_to_remove = item_to_remove.lower()
-        # remove_index = Product.index(item_to_remove)
-        #The method above is unnecessary and overcomplicating things in comparison to chatgpt method
-        # Product.pop(remove_index)
-        # print(f"{remove_index} has been removed. Current list: {Product}")
+Product = []
+couriers_list = []
 
-print("Welcome to Cool Cafe, please select option '1' for products menu or '0' to exit") 
 
- # 1 FOR PRODUCT MENU 0 TO EXIT  - Zak
-def main_menu():
+def load_products():
+    global Product
+
+
+    try:
+        with open("cafe_products.json", "r") as file:
+            Product = json.load(file)
+    except FileNotFoundError:
+        Product = ["chai", "lemon tea", "liquorice tea"]
+
+
+def save_products():
+    with open("cafe_products.json", "w") as file:
+        json.dump(Product, file)
+
+
+def main_menu_display():
     print("¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬")
     print("|              Main Menu                 |")
     print("| Exit App                             0 |")
     print("| Product Menu                         1 |")
+    print("| Couriers Menu                        2 |")
     print("|________________________________________|")
 
-def product_menu():
+
+def product_menu_display():
     print("¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬")
     print("|            Product Menu                |")
-    print("| Print Product                        0 |")
-    print("| Add Product                          1 |")
-    print("| Update Product                       2 |")
-    print("| Remove Product                       3 |")
-    print("| Return                               4 |")
-    print("|________________________________________|")
-
-def orders_menu():
-    print("¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬")
-    print("|            Orders Menu                 |")
-    print("| Print Orders                         1 |")
-    print("| Add Order                            2 |")
-    print("| Update Order Status                  3 |")
-    print("| Update Order Details                 4 |")
-    print("| Delete Order                         5 |")
     print("| Return                               0 |")
+    print("| Print Product                        1 |")
+    print("| Add Product                          2 |")
+    print("| Update Product                       3 |")
+    print("| Remove Product                       4 |")
     print("|________________________________________|")
 
-def print_orders():
-    if len(Orders) == 0:
-        print("No orders.")
-    else:
-        i = 0
-        while i < len(Orders):
-            print(i, Orders[i])
-            i += 1
 
-def add_order():
-    name = input("Name: ")
-    address = input("Address: ")
-    phone = input("Phone: ")
-
-    order = {
-        "name": name,
-        "address": address,
-        "phone": phone,
-        "status": "PREPARING"
-    }
-
-    Orders.append(order)
-    print("Order added.")
-
-def print_statuses():
-    i = 0
-    while i < len(status_list):
-        print(i, status_list[i])
-        i += 1
+def main_menu_options():
+        while True:
+            main_menu_display()
+            choice = input("Select a number: ")
+            choice = choice.lower()
+            if choice == "0":
+                print("App is closed.")
+                exit()
+            elif choice == "1":
+                product_menu_options()
+            elif choice == "2":
+                couriers_main()
+            else:
+                print("Number is not recognised. Please try again.")
 
 
-def update_status():
-    print_orders()
-    order_index = int(input("Order index: "))
-
-    print_statuses()
-    status_index = int(input("Status index: "))
-
-    if order_index < len(Orders) and status_index < len(status_list):
-        Orders[order_index]["status"] = status_list[status_index]
-        print("Status updated.")
-    else:
-        print("Invalid input.")
-
-def update_order():
-    print_orders()
-    index = int(input("Order index: "))
-
-    if index < len(Orders):
-        order = Orders[index]
-
-        name = input("New name (leave blank to skip): ")
-        if name != "":
-            order["name"] = name
-
-        address = input("New address (leave blank to skip): ")
-        if address != "":
-            order["address"] = address
-
-        phone = input("New phone (leave blank to skip): ")
-        if phone != "":
-            order["phone"] = phone
-
-        print("Order updated.")
-    else:
-        print("Invalid index.")
-
-def delete_order():
-    print_orders()
-    index = int(input("Order index to delete: "))
-
-    if index < len(Orders):
-        Orders.pop(index)
-        print("Order deleted.")
-    else:
-        print("Invalid index.")
-
-def orders_menu_process():
+def product_menu_options():
     while True:
-        orders_menu()
-        choice = input("Select: ")
-
-        if choice == "0":
-            return
-
-        elif choice == "1":
-            print_orders()
-
+        product_menu_display()
+        choice = input("Please select a number: ")
+        choice = choice.lower()
+        if choice == "1":
+            print(Product)
+            product_menu_options()
         elif choice == "2":
-            add_order()
-
+            add_product()
         elif choice == "3":
-            update_status()
-
+            update_product()
         elif choice == "4":
-            update_order()
-
-        elif choice == "5":
-            delete_order()
-
+            remove_product()
+        elif choice == "0":
+            main_menu_options()
         else:
-            print("Invalid choice.")
+            print("Number not recognised. Please try again.")
 
 
-def main_selection_process():
+def add_product():
     while True:
-        main_menu()
-        main_menu_choice = input("Select a number: ")
-        main_menu_choice = main_menu_choice.lower()
-        if main_menu_choice == "0":
-            print("App is closed.")
-            exit()
-        elif main_menu_choice == "1":
-            product_selection_process()
+        print(Product)
+        choice = input("Please enter new product name or 'cancel' to go back: ")
+        choice = choice.lower()
+        if choice == "cancel":
+            product_menu_options()
         else:
-            print("Number is not recognised. Please try again.")
+            Product.append(choice)
+            print(f"{choice} has been added. Current List: {Product}")
+            save_products()
 
-def add_list():
-    new_product = input("Please enter new product name: ")
-    new_product = new_product.lower()
-    Product.append(new_product)
-    print(f"{new_product} has been added. Current List: {Product}")
 
-def remove_list():
-    while True:
-        item_to_remove = input("Please enter the name of item to remove: ")
-        # item_to_remove = item_to_remove.lower()
-        # remove_index = Product.index(item_to_remove)
-        #The method above is unnecessary and overcomplicating things in comparison to chatgpt method
-        # Product.pop(remove_index)
-        # print(f"{remove_index} has been removed. Current list: {Product}")
-        if item_to_remove in Product:
-            Product.remove(item_to_remove)
-            print(f"{item_to_remove} has been removed. Current list: {Product}")
-        elif item_to_remove not in Product:
-            print(f"{item_to_remove} is not in the product list.")
+        choice_2 = input("Do you want to add another item? Yes or no: ")
+        choice_2 = choice_2.lower()
+        if choice_2 == "yes":
             continue
-        remove_another_item = input("Do you want to remove another item? Yes or no: ")
-        remove_another_item = remove_another_item.lower()
-        if remove_another_item == "yes":
-            continue
-        elif remove_another_item == "no":
-            product_selection_process()
+        elif choice_2 == "no":
+            product_menu_options()
         else:
             print("Please try again.")
 
 
-def return_choice():
-    print(Product)
-    return
-
-def product_selection_process():
+def remove_product():
     while True:
-        product_menu()
-        product_menu_choice = input("Please select a number: ")
-        product_menu_choice = product_menu_choice.lower()
-        if product_menu_choice == "0":
-            return_choice()
-        elif product_menu_choice == "1":
-            add_list()
-        elif product_menu_choice == "2":
+            print(Product)
+            choice = input("Enter the name of item to remove or 'cancel' go back: ")
+            choice = choice.lower()
+            if choice == "cancel":
+                return product_menu_options()
+            elif choice in Product:
+                Product.remove(choice)
+                print(f"{choice} has been removed. Current list: {Product}")
+                save_products()
+            else:
+                print(f"{choice} is not in the product list.")
+                continue
+
+
+            choice_2 = input("Do you want to remove another item? Yes or no: ")
+            choice_2 = choice_2.lower()
+            if choice_2 == "yes":
+                continue
+            elif choice_2 == "no":
+                product_menu_options()
+            else:
+                print("Please try again.")
+
+
+def update_product():
+    #Find out how to change str elements inside of a current list
+    while True:
+        print(Product)
+        choice = input("Enter name of product you want to update or 'cancel' to go back: ")
+        choice = choice.lower()
+        if choice == 'cancel':
+            product_menu_options()
+        elif choice in Product:
+            x = Product.index(choice)
+            choice_2 = input("Enter the updated name: ")
+            #Product[x].replace(choice, choice_2)
+            #That one line above bugged me so much. It was literally more simple, I just overcomplicated it.
+            #The line below is the answer, Thanks to a little chatgpt help [Insert Wink].
+            Product[x] = choice_2
+            print(f"{choice} has been updated. Current list: {Product}")
+            save_products()
+        else:
+            print("This item is not in the Product List. Please try again.")
+
+
+        choice_3 = input("Do you want to remove another item? Yes or no: ")
+        choice_3 = choice_3.lower()
+        if choice_3 == "yes":
+            continue
+        elif choice_3 == "no":
+            product_menu_options()
+        else:
+            print("Please try again.")
+
+
+''' Dilrukshi's work'''#
 
 
 
-     #happy hour
-     #make a change
-     #testingt
 
+def couriers_menu():                              #Working
+    print("******************************")
+    print("***  Couriers Menu         ***")
+    print("***  0. Return             ***")
+    print("***  1. View Couriers      ***")
+    print("***  2. Add Courier        ***")
+    print("***  3. Update Courier     ***")
+    print("***  4. Delete Courier     ***")
+    print("******************************")
+
+
+
+
+def view_couriers():                              #Working          
+    print("***    View Couriers       ***")
+    if len(couriers_list) == 0:
+        print("No couriers available.")
+    else:
+        for i, courier in enumerate(couriers_list):
+            print(f"{i}: {courier}")
+
+
+
+
+
+
+
+
+def add_courier():                             #Working
+    courier_name = str(input(f" Please enter a new courier name: "))
+    choice = (int(input(f"Are you sure you want to add {courier_name} to the courier list? 1- Yes 2- No ")))
+    if choice == 1:
+            couriers_list.append(courier_name)
+            print(f"{courier_name} has been added to the courier list.")
+    if choice == 2:
+         print(input("Would you like to add another courier? 1- Yes 2- No "))
+
+
+
+
+    elif choice == 2:
+         return
+    else:
+        print("Invalid choice.")
+
+
+
+
+
+
+
+
+def update_courier():                             #Working
+   
+    view_couriers()
+    try:    
+        update_index = int(input(f"Please enter the index number of the courier you want to update: "))
+       
+        old =  couriers_list[update_index]
+        print(f"The current courier at index {update_index} is {old}.")
+
+
+
+
+        new = str(input("Enter the new courier name: "))
+        couriers_list[update_index] = new
+       
+        print(f"{old} has been updated to {new} in the courier list.")
+
+
+
+
+        choice = int(input("Would you like to update another courier? 1- Yes 2- No "))
+       
+        if choice == 2:
+            return  
+       
+    except ValueError:
+        print(" ** Invalid input ** Please enter a valid number.")
+
+
+
+
+def delete_courier():                             #Working                                                                                          
+    view_couriers()
+    try:
+        delete_index = int(input(f"Please enter the index number of the courier you want to delete: "))
+
+
+
+
+        deleted_courier = couriers_list[delete_index]
+
+
+
+
+        choice = int(input(f"Are you sure you want to delete {deleted_courier}? 1- Yes 2- No "))          
+       
+        if choice == 1:
+                removed_courier = couriers_list.pop(delete_index)
+                print(f"{removed_courier} has been deleted from the courier list.")  
+
+
+
+
+        elif choice == 2:
+                return
+        else:
+            print("Invalid option. Returning to couriers menu.")
+           
+    except ValueError:
+        print(" ** Invalid input ** Please enter a valid number.")
+   
+def couriers_main():
+         # Couriers menu loop
+        while True:                                      
+            couriers_menu()  
+            choice = (int(input(f"Please select an option: ")))
+   
+            if choice == 0:
+                break
+       
+            elif choice == 1:
+                view_couriers()
+   
+            elif choice == 2:
+                add_courier()
+   
+            elif choice == 3:
+                update_courier()
+   
+            elif choice == 4:
+                delete_courier()
+            else:
+                print("Invalid option. Please try again.")
+
+
+
+load_products()
+main_menu_options()
+
+
+'''Also, use the visible index and value pair, and create the product
+list in columns on index and values(basically,
+make the product look nicer)(check your notebook)'''
+
+
+####BELOW IS ZAKS work
+
+def orders_menu_options():
+    while True:
+        orders_menu()
+        choice = input("Please select a number: ")
+
+
+        if choice == "0":
+            return
+
+
+        elif choice == "1":
+            if len(Orders) == 0:
+                print("No orders found.")
+            else:
+                i = 0
+                while i < len(Orders):
+                    print(i, Orders[i])
+                    i += 1
+
+
+        elif choice == "2":
+            name = input("Customer name: ")
+            address = input("Customer address: ")
+            phone = input("Customer phone number: ")
+
+
+            order = {
+                "name": name,
+                "address": address,
+                "phone": phone,
+                "status": "PREPARING"
+            }
+
+
+            Orders.append(order)
+            print("Order added.")
+
+
+        elif choice == "3":
+            if len(Orders) == 0:
+                print("No orders to update.")
+                continue
+
+
+            i = 0
+            while i < len(Orders):
+                print(i, Orders[i])
+                i += 1
+
+
+            try:
+                index = int(input("Select order index: "))
+                if index < 0 or index >= len(Orders):
+                    print("Number not recognised.")
+                    continue
+            except:
+                print("Number not recognised.")
+                continue
+
+
+            i = 0
+            while i < len(status_list):
+                print(i, status_list[i])
+                i += 1
+
+
+            try:
+                status_index = int(input("Select status index: "))
+                if status_index < 0 or status_index >= len(status_list):
+                    print("Number not recognised.")
+                    continue
+            except:
+                print("Number not recognised.")
+                continue
+
+
+            Orders[index]["status"] = status_list[status_index]
+            print("Order status updated.")
+
+
+        elif choice == "4":
+            if len(Orders) == 0:
+                print("No orders found.")
+                continue
+
+
+            i = 0
+            while i < len(Orders):
+                print(i, Orders[i])
+                i += 1
+
+
+            try:
+                index = int(input("Select order index: "))
+                if index < 0 or index >= len(Orders):
+                    print("Number not recognised.")
+                    continue
+            except:
+                print("Number not recognised.")
+                continue
+
+
+            order = Orders[index]
+
+
+            for key in order:
+                new_value = input(f"Update {key} (leave blank to skip): ")
+                if new_value != "":
+                    order[key] = new_value
+
+
+            print("Order updated.")
+
+
+        elif choice == "5":
+            if len(Orders) == 0:
+                print("No orders found.")
+                continue
+
+
+            i = 0
+            while i < len(Orders):
+                print(i, Orders[i])
+                i += 1
+
+
+            try:
+                index = int(input("Select order index: "))
+                if index < 0 or index >= len(Orders):
+                    print("Number not recognised.")
+                    continue
+            except:
+                print("Number not recognised.")
+                continue
+
+
+            Orders.pop(index)
+            print("Order deleted.")
+
+
+        else:
+            print("Number not recognised.")
+
+load_products()
+main_menu_options()
