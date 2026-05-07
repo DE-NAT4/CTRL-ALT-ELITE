@@ -1,4 +1,4 @@
-from file_handler import load_data, save_data
+from source.file_handler import load_data, save_data
 
 
 Product = load_data(
@@ -432,4 +432,5 @@ def remove_order():
 
     print("Order not found")
 
+load_data()
 main_menu_options()
