@@ -1,25 +1,23 @@
-import json
+from file_handler import load_data, save_data
 
 
-Product = []
-couriers_list = []
-orders =[]
+Product = load_data(
+    "products.json",
+    ["chai", "lemon tea", "liquorice tea"]
+)
 
+couriers_list = load_data(
+    "couriers.json",
+    []
+)
 
-def load_products():
-    global Product
+orders = load_data(
+    "orders.json",
+    []
+)
 
+status = ["PREPARING", "DISPATCHED", "DELIVERED"]
 
-    try:
-        with open("cafe_products.json", "r") as file:
-            Product = json.load(file)
-    except FileNotFoundError:
-        Product = ["chai", "lemon tea", "liquorice tea"]
-
-
-def save_products():
-    with open("cafe_products.json", "w") as file:
-        json.dump(Product, file)
 
 
 def main_menu_display():
@@ -68,7 +66,6 @@ def product_menu_options():
         choice = choice.lower()
         if choice == "1":
             print(Product)
-            product_menu_options()
         elif choice == "2":
             add_product()
         elif choice == "3":
@@ -76,7 +73,7 @@ def product_menu_options():
         elif choice == "4":
             remove_product()
         elif choice == "0":
-            main_menu_options()
+             break
         else:
             print("Number not recognised. Please try again.")
 
@@ -87,11 +84,12 @@ def add_product():
         choice = input("Please enter new product name or 'cancel' to go back: ")
         choice = choice.lower()
         if choice == "cancel":
-            product_menu_options()
+            break
         else:
             Product.append(choice)
+            save_data("products.json", Product)
             print(f"{choice} has been added. Current List: {Product}")
-            save_products()
+            
 
 
         choice_2 = input("Do you want to add another item? Yes or no: ")
@@ -99,7 +97,7 @@ def add_product():
         if choice_2 == "yes":
             continue
         elif choice_2 == "no":
-            product_menu_options()
+            break
         else:
             print("Please try again.")
 
@@ -110,11 +108,12 @@ def remove_product():
             choice = input("Enter the name of item to remove or 'cancel' go back: ")
             choice = choice.lower()
             if choice == "cancel":
-                return product_menu_options()
+                 break
             elif choice in Product:
-                Product.remove(choice)
-                print(f"{choice} has been removed. Current list: {Product}")
-                save_products()
+                 Product.remove(choice)
+                 save_data("products.json", Product)
+                 print(f"{choice} has been removed. Current list: {Product}")
+                  
             else:
                 print(f"{choice} is not in the product list.")
                 continue
@@ -125,7 +124,7 @@ def remove_product():
             if choice_2 == "yes":
                 continue
             elif choice_2 == "no":
-                product_menu_options()
+                break
             else:
                 print("Please try again.")
 
@@ -137,26 +136,22 @@ def update_product():
         choice = input("Enter name of product you want to update or 'cancel' to go back: ")
         choice = choice.lower()
         if choice == 'cancel':
-            product_menu_options()
+           break
         elif choice in Product:
             x = Product.index(choice)
             choice_2 = input("Enter the updated name: ")
-            #Product[x].replace(choice, choice_2)
-            #That one line above bugged me so much. It was literally more simple, I just overcomplicated it.
-            #The line below is the answer, Thanks to a little chatgpt help [Insert Wink].
             Product[x] = choice_2
+            save_data("products.json", Product)
             print(f"{choice} has been updated. Current list: {Product}")
-            save_products()
         else:
             print("This item is not in the Product List. Please try again.")
-
 
         choice_3 = input("Do you want to remove another item? Yes or no: ")
         choice_3 = choice_3.lower()
         if choice_3 == "yes":
             continue
         elif choice_3 == "no":
-            product_menu_options()
+            break
         else:
             print("Please try again.")
 
@@ -190,11 +185,10 @@ def add_courier():                             #Working
     courier_name = str(input(f" Please enter a new courier name: "))
     choice = (int(input(f"Are you sure you want to add {courier_name} to the courier list? 1- Yes 2- No ")))
     if choice == 1:
-            couriers_list.append(courier_name)
-            print(f"{courier_name} has been added to the courier list.")
-    if choice == 2:
-         print(input("Would you like to add another courier? 1- Yes 2- No "))
-
+           couriers_list.append(courier_name)
+           save_data("couriers.json", couriers_list)
+           print(f"{courier_name} has been added to the courier list.")
+           print(f"{courier_name} added")
 
     elif choice == 2:
          return
@@ -213,6 +207,7 @@ def update_courier():                             #Working
 
         new = str(input("Enter the new courier name: "))
         couriers_list[update_index] = new
+        save_data("couriers.json", couriers_list)
        
         print(f"{old} has been updated to {new} in the courier list.")
 
@@ -237,6 +232,7 @@ def delete_courier():                             #Working
        
         if choice == 1:
                 removed_courier = couriers_list.pop(delete_index)
+                save_data("couriers.json", couriers_list)
                 print(f"{removed_courier} has been deleted from the courier list.")  
 
         elif choice == 2:
@@ -278,9 +274,6 @@ make the product look nicer)(check your notebook)'''
 
 ##### peer reviewed zaks work
 
-orders = []
-status = []
-
 
 def orders_menu_display():
      print("¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬¬")
@@ -290,7 +283,8 @@ def orders_menu_display():
      print("| Add Orders                           2 |")
      print("| Update order status                  3 |")
      print("| update order                         4 |")
-     print("| Remove Product                       5 |")
+     print("| Add users Info                       5 |")
+     print("| Remove Product                       6 |")
      print("|________________________________________|")
 
 
@@ -313,78 +307,129 @@ def orders_menu_options():
         elif choice == "4":
             update_order()
         elif choice == "5":
-            remove_product()
+            add_users_info()
+        elif choice == "6":
+            remove_order()
         else:
             print("Number not recognised. Please try again.")
  
 
 def add_order():
     while True:
-        print(orders)
-        choice = input("Please enter new order or 'cancel' to go back: ")
-        if choice.lower() == "cancel":
+        name = input("Customer name (or 'cancel'): ").lower()
+        if name == "cancel":
             break
-        else:
-            orders.append(choice)
-            print(f"{choice} has been added. current list:{orders}")
+
+        address = input("Customer address: ")
+        phone = input("Customer phone number: ")
+
+        order = {
+            "name": name,
+            "address": address,
+            "phone": phone,
+            "status": "PREPARING"
+        }
+
+        orders.append(order)
+        save_data("orders.json", orders)
+
+        print(f"Order for {name} added.")
+        
+        again = input("Add another order? (yes/no): ").lower()
+        if again != "yes":
+            break
+    
 
 
 def update_order_status():
+    if len(orders) == 0:
+        print("No orders available.")
+        return
 
     print(orders)
 
-    selected_order = input("Which order would you like to update? ")
-
-    if selected_order in orders:
-
-        order_index = orders.index(selected_order)
-
-        new_status = input(
-            "Enter new status: delivered, pending, creating: "
-        )
-
-        status[order_index] = new_status
-
-        print(f"{selected_order} updated to {new_status}")
-
-    else:
-        print("Order not found")
-
-def update_order():
-    print(orders)
-
-    name = input("Which order do you want to update? ")
+    name = input("Which order would you like to update? ").lower()
 
     for order in orders:
         if order["name"] == name:
+            print(status)
 
-            new_name = input("New name (press enter to skip): ")
-            new_status = input("New status (pending/returned/delivered): ")
+            new_status = input("Enter new status: ").upper()
 
-            if new_name != "":
-                order["name"] = new_name
-
-            if new_status != "":
+            if new_status in status:
                 order["status"] = new_status
-
-            print("Order updated:", order)
-            return
+                save_data("orders.json", orders)
+                print(f"{name} updated to {new_status}")
+                return
+            else:
+                print("Invalid status.")
+                return
 
     print("Order not found")
-def remove_product():
+
+   
+
+def update_order():
+    if len(orders) == 0:
+        print("No orders to update.")
+        return
+
+    for i, order in enumerate(orders):
+        print(i, order)
+
+    try:
+        index = int(input("Select order index: "))
+        if index < 0 or index >= len(orders):
+            print("Invalid index.")
+            return
+    except ValueError:
+        print("Invalid input.")
+        return
+
+    for i, s in enumerate(status):
+        print(i, s)
+
+    try:
+        status_index = int(input("Select status index: "))
+        if status_index < 0 or status_index >= len(status):
+            print("Invalid status.")
+            return
+    except ValueError:
+        print("Invalid input.")
+        return
+
+    orders[index]["status"] = status[status_index]
+    save_data("orders.json", orders)
+
+    print("Order updated.")
+
+def add_users_info():
+    name = input("Customers name: ")
+    address = input("Customer address: ")
+    phone = input("customer phone number: ")
+
+    order = {
+        "name": name,
+        "address": address,
+        "phone": phone,
+        "status":"PREPARING"
+    }
+    orders.append(order)
+    save_data("orders.json", orders)
+    print("order added.")
+
+def remove_order():
     print(orders)
 
-    name = input("Which order do you want to remove? ")
+    name = input("Which order do you want to remove? ").lower()
 
     for order in orders:
         if order["name"] == name:
             orders.remove(order)
+            save_data("orders.json", orders)
             print(f"{name} removed successfully")
             return
 
     print("Order not found")
 
-
-load_products()
 main_menu_options()
-orders_menu_options()

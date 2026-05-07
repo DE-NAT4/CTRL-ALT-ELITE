@@ -1,38 +1,23 @@
-#Load couriers file
-def open_courier_file(filename):
-    courier_list = []
-    try:
-        with open(filename, "r") as file:
-            courier_list = [line.strip() for line in file]
-        return courier_list
-    except FileNotFoundError as fnfe:
-        print(f"File not found {fnfe}")
-        return courier_list
-   
-#Save couriers file
-def save_couriers_file(filename, couriers):
-    try:
-        with open(filename, "w") as file:
-            for courier in couriers:
-                file.write(courier + "\n")
-    except FileNotFoundError as fnfe:
-        print(f"File not found {fnfe}")
-
-
-
 import json
+import os
 
-Product = []
 
-def load_products():
-    global Product
+# LOAD DATA
+def load_data(filename, default_data):
 
-    try:
-        with open("cafe_products.json", "r") as file:
-            Product = json.load(file)
-    except FileNotFoundError:
-        Product = ["chai", "lemon tea", "liquorice tea"]
+    if not os.path.exists(filename):
 
-def save_products():
-    with open("cafe_products.json", "w") as file:
-        json.dump(Product, file)
+        with open(filename, "w") as file:
+            json.dump(default_data, file, indent=4)
+
+        return default_data
+
+    with open(filename, "r") as file:
+        return json.load(file)
+
+
+# SAVE DATA
+def save_data(filename, data):
+
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
