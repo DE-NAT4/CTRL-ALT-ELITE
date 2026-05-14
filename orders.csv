@@ -3,7 +3,8 @@
         "customer_name": "John",
         "customer_address": "London",
         "customer_phone": "12345",
-        "courier": "dhl",
-        "status": "Preparing"
+        "courier": "amazon",
+        "status": "Preparing",
+        "items": []
     }
 ]
