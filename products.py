@@ -85,3 +85,4 @@ def delete_product(product_id):
 
     except Exception as e:
         print("Error deleting product:", e)
+    
