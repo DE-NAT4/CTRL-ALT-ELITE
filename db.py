@@ -43,7 +43,7 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS orders (
         order_id SERIAL PRIMARY KEY,
         customer_name VARCHAR(100),
-        customer_address VARCHAR(100),
+        customer_address TEXT,
         customer_phone VARCHAR(20),
         courier_id INT,
         status INT,
