@@ -23,7 +23,7 @@ def create_tables():
     # PRODUCTS
     cur.execute("""
     CREATE TABLE IF NOT EXISTS products (
-        id SERIAL PRIMARY KEY,
+        product_id SERIAL PRIMARY KEY,
         name VARCHAR(100),
         price DECIMAL
     );
@@ -32,7 +32,7 @@ def create_tables():
     # COURIERS
     cur.execute("""
     CREATE TABLE IF NOT EXISTS couriers (
-        id SERIAL PRIMARY KEY,
+        courier_id SERIAL PRIMARY KEY,
         name VARCHAR(100),
         phone VARCHAR(20)
     );
@@ -41,7 +41,7 @@ def create_tables():
     # ORDERS
     cur.execute("""
     CREATE TABLE IF NOT EXISTS orders (
-        id SERIAL PRIMARY KEY,
+        order_id SERIAL PRIMARY KEY,
         customer_name VARCHAR(100),
         customer_address TEXT,
         customer_phone VARCHAR(20),
